@@ -93,7 +93,7 @@ ttk.Label(filemanage, textvariable=csvfile).grid(row=0,column=1)
 analysistype = StringVar()
 
 def writelines(*args):
-    messagebox.showinfo("This button will trigger writing to the CSV file.")
+    messagebox.showinfo(message="This button will trigger writing to the CSV file.")
     return
 
 writebutton = ttk.Button(filemanage, text="Save", command=writelines)
@@ -102,7 +102,7 @@ writebutton.grid(row=11,column=0)
 ttk.Label(plotting, text="Plot {0} as a function of".format(analysistype)).grid(row=0,column=0)
 
 def plotanalysis(*args):
-    messagebox.showinfo("The analysis plot should be updated now.")
+    messagebox.showinfo(message="The analysis plot should be updated now.")
     return
 
 plotx = StringVar()
