@@ -107,6 +107,7 @@ def filenew(*args):
     newfile = Toplevel()
     newfile.title("New File")
     newframe = ttk.Frame(newfile)
+    newframe.grid()
     analysistime = ttk.Radiobutton(newframe, text="Raw",
             variable=analysismode, value="Time")
     analysistime.grid(row=0, column=0)
@@ -114,8 +115,8 @@ def filenew(*args):
             variable=analysismode, value="Slope")
     analysisslope.grid(row=0, column=1)
     ttk.Label(newframe, text="Additional Columns").grid(row=1,column=0)
-#    additionaltext = Text(newframe, width=40, height=10)
-#    additionaltext.grid(row=1, column=1)
+    additionaltext = Text(newframe, width=40, height=10)
+    additionaltext.grid(row=1, column=1)
     cancelnew = ttk.Button(newframe, text="Cancel",
             command=newfile.destroy)
     cancelnew.grid(row=2, column=0)
