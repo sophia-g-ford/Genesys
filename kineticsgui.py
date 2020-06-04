@@ -95,17 +95,18 @@ class CreateNewFile():
     def savefile(*args):
         additional = self.additionaltext.get("1.0","end").split(",\n")
         if self.analysismode.get() == "Time":
-            parent.writerfields = ["Reaction"] + additional + ["Time","Abs"]
+            self.parent.writerfields = ["Reaction"] + additional + ["Time","Abs"]
         elif analysismode.get() == "Slope":
-            parent.writerfields = ["Reaction"] + additional + ["Slope","Slope.Err"]
+            self.parent.writerfields = ["Reaction"] + additional + ["Slope","Slope.Err"]
         else:
             # analysismode has not been set to a correct value
             messagebox.showerror(message="Please set mode of recording.")
             return
         with open(self.filename, "w") as fileref:
-            csvdict = DictWriter(fileref, fields=parent.writerfields)
+            csvdict = DictWriter(fileref, fields=self.parent.writerfields)
             csvdict.write_header()
-        parent.reactionnumber.set(0)
+        self.parent.reactionnumber.set(0)
+        self.parent.csvfile.set(self.filename)
         self.newfile.destroy()
         return
 
