@@ -43,7 +43,7 @@ class SpecTab():
         self.parent.notebook.add(self.frame, text="Spectrometer")
         ttk.Label(self.frame, text="Spectrometer").grid(row=0,column=0)
         self.speccombo = ttk.Combobox(self.frame)
-        self.speccombo['values'] = ('/dev/usb.serial', '/dev/ttyS0')
+        self.speccombo['values'] = ['/dev/usb.serial', '/dev/ttyS0']
         self.speccombo.bind('<<ComboboxSelected>>', self.specselect)
         self.speccombo.grid(row=0,column=1)
         self.wavelength = IntVar()
@@ -107,7 +107,7 @@ class CreateNewFile():
         self.savenewbutton = ttk.Button(self.newframe, text="Create",
                                    command=self.savefile)
         self.savenewbutton.grid(row=2, column=1)
-    def savefile(*args):
+    def savefile(self, *args):
         additional = self.additionaltext.get("1.0","end").split(",\n")
         if self.analysismode.get() == "Time":
             self.parent.writerfields = ["Reaction"] + additional + ["Time","Abs"]
@@ -153,12 +153,12 @@ class FileTab():
         self.writebutton = ttk.Button(self.frame, text="Save",
                                       command=self.writelines)
         self.writebutton.grid(row=13,column=0)
-    def filenew(*args):
+    def filenew(self, *args):
         # New file. Prompt for info from dialog.
         filename = filedialog.asksaveasfilename()
         CreateNewFile(self, filename)
         return
-    def fileselect(*args):
+    def fileselect(self, *args):
         filename = filedialog.askopenfilename()
         with open(filename, "r") as fileref:
             csvstart = fileref.read(1024)
@@ -212,7 +212,7 @@ class FileTab():
                 messagebox.showerror(message="CSV file doesn't contain any content.")
         return
 
-    def writelines(*args):
+    def writelines(self, *args):
         messagebox.showinfo(message="This button will trigger writing to the CSV file.")
         return
 
@@ -231,7 +231,7 @@ class PlotTab():
         self.analysisplot = Canvas(self.frame)
         self.analysisplot.grid(row=11,column=0,columnspan=2)
 
-    def plotanalysis(*args):
+    def plotanalysis(self, *args):
         messagebox.showinfo(message="The analysis plot should be updated now.")
         return
 
