@@ -21,6 +21,21 @@ from csv import Sniffer, DictReader, DictWriter
 # from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 # from matplotlib.figure import Figure
 
+class TestSpec():
+    '''This class will serve as a substitute for a spectrometer in
+       the absence of an actual Genesys spectrophotometer. The
+       class will implement all of the methods of the Genesys
+       class, but most will not do anything.'''
+    def reading(self):
+        return 0.5
+    def blank(self):
+        return
+    def beep(self, times=1):
+        messagebox.showinfo(message="The spectrometer should have beeped {} times.".format(times))
+        return
+    def wavelength(self, wavelength):
+        return
+
 class SpecTab():
     def __init__(self, parent):
         self.parent = parent
