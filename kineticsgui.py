@@ -13,13 +13,14 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox, filedialog
-# from genesys import Genesys
+from genesys import Genesys
 # from datetime import datetime
 # from time import sleep
 from csv import Sniffer, DictReader, DictWriter
 # from scipy.stats import linregress
 # from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 # from matplotlib.figure import Figure
+import serial.tools.list_ports as list_ports
 
 class TestSpec():
     '''This class will serve as a substitute for a spectrometer in
@@ -43,8 +44,12 @@ class SpecTab():
         self.frame = ttk.Frame(self.parent.notebook)
         self.parent.notebook.add(self.frame, text="Spectrometer")
         ttk.Label(self.frame, text="Spectrometer").grid(row=0,column=0)
+        self.spectrometer = None
         self.speccombo = ttk.Combobox(self.frame)
-        self.speccombo['values'] = ['/dev/usb.serial', '/dev/ttyS0']
+        specvalues = ['test']
+        for port in list_ports.comports():
+            specvalues.append(port[0])
+        self.speccombo['values'] = specvalues
         self.speccombo.bind('<<ComboboxSelected>>', self.specselect)
         self.speccombo.grid(row=0,column=1)
         self.wavelength = IntVar()
@@ -72,15 +77,20 @@ class SpecTab():
         self.timecourse = Canvas(self.frame)
         self.timecourse.grid(row=6,column=0,columnspan=2)
 
-    def specselect(*args):
-        messagebox.showinfo(message="This will be used to select the spectrometer.")
+    def specselect(self, *args):
+        spec = self.speccombo.get()
+        if spec == "test":
+            self.spectrometer = TestSpec()
+        else:
+            self.spectrometer = Genesys(spec)
+        self.spectrometer.beep(2)
         return
 
-    def blank(*args):
+    def blank(self, *args):
         messagebox.showinfo(message="This will set the wavelength and blank the spectrometer.")
         return
 
-    def collect(*args):
+    def collect(self, *args):
         messagebox.showinfo(message="This will collect data from the spectrometer for the specified period of time.")
         return
 
