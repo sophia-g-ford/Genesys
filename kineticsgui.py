@@ -34,6 +34,7 @@ class TestSpec():
         messagebox.showinfo(message="The spectrometer should have beeped {} times.".format(times))
         return
     def wavelength(self, wavelength):
+        messagebox.showinfo(message="The spectrometer is set to {} nm.".format(wavelength))
         return
 
 class SpecTab():
