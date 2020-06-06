@@ -175,7 +175,7 @@ class FileTab():
                     self.csvfile.set(filename)
                     self.writerfields = csvdict.fieldnames
                     self.analysismode.set("Time")
-                    additional = [field for field in writerfields if field not in ["Reaction","Time","Abs"]]
+                    additional = [field for field in self.writerfields if field not in ["Reaction","Time","Abs"]]
                     for prow, field in enumerate(additional):
                         self.promptstrings[field] = StringVar()
                         self.promptlabels[field] = ttk.Label(self.frame,
@@ -192,7 +192,7 @@ class FileTab():
                     self.csvfile.set(filename)
                     self.writerfields = csvdict.fieldnames
                     self.analysismode.set("Slope")
-                    additional = [field for field in writerfields if field != "Reaction"]
+                    additional = [field for field in self.writerfields if field != "Reaction"]
                     for prow, field in enumerate(additional):
                         self.promptstrings[field] = StringVar()
                         self.promptlabels[field] = ttk.Label(self.frame,
