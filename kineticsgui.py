@@ -53,14 +53,17 @@ class SpecTab():
         self.speccombo.bind('<<ComboboxSelected>>', self.specselect)
         self.speccombo.grid(row=0,column=1)
         self.wavelength = IntVar()
+        self.wavelength.set(475)
         ttk.Label(self.frame, text="Wavelength (nm)").grid(row=1,column=0)
         self.waveentry = ttk.Entry(self.frame, textvariable=self.wavelength)
         self.waveentry.grid(row=1,column=1)
         self.frequency = DoubleVar()
+        self.frequency.set(1)
         ttk.Label(self.frame, text="Frequency (s)").grid(row=2,column=0)
         self.freqentry = ttk.Entry(self.frame, textvariable=self.frequency)
         self.freqentry.grid(row=2,column=1)
         self.duration = DoubleVar()
+        self.duration.set(120)
         ttk.Label(self.frame, text="Duration (s)").grid(row=3, column=0)
         self.durentry = ttk.Entry(self.frame, textvariable=self.duration)
         self.durentry.grid(row=3,column=1)
@@ -72,7 +75,9 @@ class SpecTab():
         self.runbutton.grid(row=4,column=1)
         self.runprogress = DoubleVar()
         self.progress = ttk.Progressbar(self.frame, orient=HORIZONTAL,
-                mode='determinate', variable=self.runprogress)
+                                        mode='determinate',
+                                        variable=self.runprogress,
+                                        maximum=self.duration)
         self.progress.grid(row=5,column=0,columnspan=2)
         self.timecourse = Canvas(self.frame)
         self.timecourse.grid(row=6,column=0,columnspan=2)
