@@ -78,7 +78,7 @@ class SpecTab():
         self.progress = ttk.Progressbar(self.frame, orient=HORIZONTAL,
                                         mode='determinate',
                                         variable=self.runprogress,
-                                        maximum=self.duration)
+                                        maximum=self.duration.get())
         self.progress.grid(row=5,column=0,columnspan=2)
         self.timecourse = Canvas(self.frame)
         self.timecourse.grid(row=6,column=0,columnspan=2)
@@ -98,8 +98,13 @@ class SpecTab():
         return
 
     def changewavelength(self, *args):
-        self.spectrometer.wavelength(self.wavelength.get())
-        messagebox.showinfo(message="The wavelength should be changed.")
+        # Change the wavelength once enough digits have been typed.
+        try:
+            if self.wavelength.get() > 300:
+                self.spectrometer.wavelength(self.wavelength.get())
+                messagebox.showinfo(message="The wavelength should be changed.")
+        except TclError:
+            pass
         return
 
     def collect(self, *args):
