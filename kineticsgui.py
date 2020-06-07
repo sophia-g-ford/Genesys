@@ -54,6 +54,7 @@ class SpecTab():
         self.speccombo.grid(row=0,column=1)
         self.wavelength = IntVar()
         self.wavelength.set(475)
+        self.wavelength.trace("w", self.changewavelength)
         ttk.Label(self.frame, text="Wavelength (nm)").grid(row=1,column=0)
         self.waveentry = ttk.Entry(self.frame, textvariable=self.wavelength)
         self.waveentry.grid(row=1,column=1)
@@ -94,6 +95,11 @@ class SpecTab():
     def blank(self, *args):
         self.spectrometer.blank()
         messagebox.showinfo(message="The spectrometer should be blanked.")
+        return
+
+    def changewavelength(self, *args):
+        self.spectrometer.wavelength(self.wavelength.get())
+        messagebox.showinfo(message="The wavelength should be changed.")
         return
 
     def collect(self, *args):
