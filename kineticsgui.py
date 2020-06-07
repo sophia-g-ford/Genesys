@@ -87,7 +87,8 @@ class SpecTab():
         return
 
     def blank(self, *args):
-        messagebox.showinfo(message="This will set the wavelength and blank the spectrometer.")
+        self.spectrometer.blank()
+        messagebox.showinfo(message="The spectrometer should be blanked.")
         return
 
     def collect(self, *args):
