@@ -14,8 +14,8 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox, filedialog
 from genesys import Genesys
-# from datetime import datetime
-# from time import sleep
+from datetime import datetime
+from time import sleep
 from csv import Sniffer, DictReader, DictWriter
 # from scipy.stats import linregress
 # from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -75,10 +75,10 @@ class SpecTab():
                                     command=self.collect)
         self.runbutton.grid(row=4,column=1)
         self.runprogress = DoubleVar()
+        self.runprogress.set(0)
         self.progress = ttk.Progressbar(self.frame, orient=HORIZONTAL,
                                         mode='determinate',
-                                        variable=self.runprogress,
-                                        maximum=self.duration.get())
+                                        variable=self.runprogress)
         self.progress.grid(row=5,column=0,columnspan=2)
         self.timecourse = Canvas(self.frame)
         self.timecourse.grid(row=6,column=0,columnspan=2)
@@ -108,6 +108,27 @@ class SpecTab():
         return
 
     def collect(self, *args):
+        # Clear previous run data
+        self.times = []
+        self.absorbance = []
+        # Set parameters from the interface
+        endtime = self.duration.get()
+        self.progress["maximum"] = endtime
+        frequency = self.frequency.get()
+        # Zero the clock
+        starttime = datetime.now()
+        runtime = 0
+        while runtime <= endtime:
+            self.absorbance.append(self.spectrometer.reading())
+            runtime = datetime.now() - starttime
+            runtime = runtime.total_seconds()
+            self.times.append(runtime)
+            self.runprogress.set(runtime)
+            sleep(frequency)
+        # Plot the data on the graph.
+        # Calculate the best-fit line if slope is selected.
+        # Plot the best-fit line on the graph.
+        self.runprogress.set(0)
         messagebox.showinfo(message="This will collect data from the spectrometer for the specified period of time.")
         return
 
