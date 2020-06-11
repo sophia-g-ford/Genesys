@@ -15,7 +15,7 @@ from tkinter import ttk
 from tkinter import messagebox, filedialog
 from genesys import Genesys
 from datetime import datetime
-from time import sleep
+# from time import sleep
 from csv import Sniffer, DictReader, DictWriter
 # from scipy.stats import linregress
 # from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -112,25 +112,32 @@ class SpecTab():
         self.times = []
         self.absorbance = []
         # Set parameters from the interface
-        endtime = self.duration.get()
-        self.progress["maximum"] = endtime
-        frequency = self.frequency.get()
+        # endtime = self.duration.get()
+        self.progress["maximum"] = self.duration.get()
+        # frequency = self.frequency.get()
         # Zero the clock
         starttime = datetime.now()
-        runtime = 0
-        while runtime <= endtime:
-            self.absorbance.append(self.spectrometer.reading())
-            runtime = datetime.now() - starttime
-            runtime = runtime.total_seconds()
-            self.times.append(runtime)
-            self.runprogress.set(runtime)
-            sleep(frequency)
-        # Plot the data on the graph.
-        # Calculate the best-fit line if slope is selected.
-        # Plot the best-fit line on the graph.
-        self.runprogress.set(0)
-        messagebox.showinfo(message="This will collect data from the spectrometer for the specified period of time.")
+        # runtime = 0
+        self.add_data(starttime)
         return
+
+    def add_data(self, starttime):
+        self.absorbance.append(self.spectrometer.reading())
+        runtime = datetime.now() - starttime
+        runtime = runtime.total_seconds()
+        self.times.append(runtime)
+        self.runprogress.set(runtime)
+        if runtime < self.duration.get():
+            self.progress.after(int(1000*self.frequency.get()),
+                                self.add_data, starttime)
+        else:
+            # Plot the data on the graph.
+            # Calculate the best-fit line if slope is selected.
+            # Plot the best-fit line on the graph.
+            self.runprogress.set(0)
+            messagebox.showinfo(message="The spectrometer collected {} timepoints and {} absorbances.".format(len(self.times),len(self.absorbance)))            
+        return
+        
 
 
 class CreateNewFile():
