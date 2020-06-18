@@ -30,6 +30,34 @@ for adjusting the spectrometer and the data collection using the spectrometer.
 The data collected by the spectrometer are stored in attributes of the
 object containing the spectrometer tab.
 
+## changewavelength
+
+This callback that is used when the wavelength changes needs some
+explanation. The callback is executed when the user changes the value in
+the wavelength entry box. Unfortunately, it executes this call back with
+every change, including clearing the box and typing every digit of the
+wavelength. Since the program should adjust the wavelength setting only
+when a valid wavelength is entered, the callback checks the value in the
+variable to see if it's large enough to be the wavelength of a visible
+spectrometer. The code is wrapped in a try/except structure to catch the
+exception that occurs when the box is empty.
+
+## collect
+
+The callback responding to the Collect button is divided up into two methods.
+The first sets initial parameters for the data collection, like setting
+empty lists for times and absorbance, and determining the starting time of
+the reaction. The starting time is then passed to another method that adds
+data to the times and absorbance lists, calling itself recursively until
+the duration of the reaction has been passed. This division of labor into
+two methods allows the second method to be called using the *after* method
+of Tk widgets, to take advantage of the threading inherent in GUI interfaces.
+The main purpose of using the threading is so that the progress bar updates
+appropriately. The *after* method requires as its first argument the number
+of milliseconds to wait before executing the function specified. This
+number of milliseconds must be an integer, which is why the first argument
+to the method is specified the way it is.
+
 # CSV
 
 The filemanage object contains all the code associated with setting,
