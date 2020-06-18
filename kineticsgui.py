@@ -178,6 +178,7 @@ class CreateNewFile():
             csvdict.write_header()
         self.parent.reactionnumber.set(0)
         self.parent.csvfile.set(self.filename)
+        self.parent.analysismode.set(self.analysismode.get())
         self.newfile.destroy()
         return
 
