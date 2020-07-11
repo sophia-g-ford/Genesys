@@ -146,7 +146,7 @@ class CreateNewFile():
         self.filename = filename
         self.newfile = Toplevel()
         self.newfile.title("New File")
-        self.newframe = ttk.Frame(newfile)
+        self.newframe = ttk.Frame(self.newfile)
         self.newframe.grid()
         self.analysistime = ttk.Radiobutton(self.newframe, text="Raw",
                 variable=self.analysismode, value="Time")
