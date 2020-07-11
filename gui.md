@@ -68,6 +68,34 @@ read existing CSV files to determine what mode the program runs, and
 code to create new CSV files based on the type of mode desired by the
 user.
 
+## Variables
+
+The FileTab object keeps track of the name of the CSV file in the
+variable csvfile. It keeps track of the reaction number in
+reactionnumber. It has a list called writerfields that keeps track of
+the headers to be used in the CSV file. It also contains attributes
+called promptentries, promptstrings and promptlabels, which are
+dictionaries for the Entry widgets, StringVar objects and Label widgets,
+respectively, for the values in the CSV file that must be supplied by the
+user, rather than measured by the program. The object contains an
+analysismode attribute that determines what type of data is written to
+the CSV file. Currently, the only values that analysismode can take are
+"Time", where the absorbance is recorded as a function of time, and "Slope",
+where the slope of the best-fit line to the absorbance as a function of
+time is recorded.
+
+## filenew
+
+The filenew method of the FileTab object mainly creates a new window called
+CreateNewFile. This window has widgets to select the type of analysis
+to be performed on the data, as well as a text box to list the columns
+to be written to the file that will contain information supplied by the
+user. When the file is created (using the savefile method of the
+CreateNewFile object), the column names supplied by the user and the
+column names appropriate to the analysis type are written to the file
+named according to the filename specified in the dialog immediately
+preceding the creation of the CreateNewFile object.
+
 # Analyze
 
 There is an additional tab to plot the processed data contained in the
