@@ -148,6 +148,7 @@ class CreateNewFile():
         self.newfile.title("New File")
         self.newframe = ttk.Frame(self.newfile)
         self.newframe.grid()
+        self.analysismode = StringVar()
         self.analysistime = ttk.Radiobutton(self.newframe, text="Raw",
                 variable=self.analysismode, value="Time")
         self.analysistime.grid(row=0, column=0)
@@ -167,7 +168,7 @@ class CreateNewFile():
         additional = self.additionaltext.get("1.0","end").split(",\n")
         if self.analysismode.get() == "Time":
             self.parent.writerfields = ["Reaction"] + additional + ["Time","Abs"]
-        elif analysismode.get() == "Slope":
+        elif self.analysismode.get() == "Slope":
             self.parent.writerfields = ["Reaction"] + additional + ["Slope","Slope.Err"]
         else:
             # analysismode has not been set to a correct value
