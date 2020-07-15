@@ -155,7 +155,7 @@ class CreateNewFile():
         self.analysisslope = ttk.Radiobutton(self.newframe, text="Linear",
                 variable=self.analysismode, value="Slope")
         self.analysisslope.grid(row=0, column=1)
-        ttk.Label(newframe, text="Additional Columns").grid(row=1,column=0)
+        ttk.Label(self.newframe, text="Additional Columns").grid(row=1,column=0)
         self.additionaltext = Text(self.newframe, width=40, height=10)
         self.additionaltext.grid(row=1, column=1)
         self.cancelnew = ttk.Button(self.newframe, text="Cancel",
@@ -165,7 +165,7 @@ class CreateNewFile():
                                    command=self.savefile)
         self.savenewbutton.grid(row=2, column=1)
     def savefile(self, *args):
-        additional = self.additionaltext.get("1.0","end").split(",\n")
+        additional = self.additionaltext.get("1.0","end").splitlines()
         if self.analysismode.get() == "Time":
             self.parent.writerfields = ["Reaction"] + additional + ["Time","Abs"]
         elif self.analysismode.get() == "Slope":
@@ -175,8 +175,8 @@ class CreateNewFile():
             messagebox.showerror(message="Please set mode of recording.")
             return
         with open(self.filename, "w") as fileref:
-            csvdict = DictWriter(fileref, fields=self.parent.writerfields)
-            csvdict.write_header()
+            csvdict = DictWriter(fileref, fieldnames=self.parent.writerfields)
+            csvdict.writeheader()
         self.parent.reactionnumber.set(0)
         self.parent.csvfile.set(self.filename)
         self.parent.analysismode.set(self.analysismode.get())
