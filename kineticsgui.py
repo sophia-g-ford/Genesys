@@ -167,19 +167,17 @@ class CreateNewFile():
     def savefile(self, *args):
         additional = self.additionaltext.get("1.0","end").splitlines()
         if self.analysismode.get() == "Time":
-            self.parent.writerfields = ["Reaction"] + additional + ["Time","Abs"]
+            self.writerfields = ["Reaction"] + additional + ["Time","Abs"]
         elif self.analysismode.get() == "Slope":
-            self.parent.writerfields = ["Reaction"] + additional + ["Slope","Slope.Err"]
+            self.writerfields = ["Reaction"] + additional + ["Slope","Slope.Err"]
         else:
             # analysismode has not been set to a correct value
             messagebox.showerror(message="Please set mode of recording.")
             return
         with open(self.filename, "w") as fileref:
-            csvdict = DictWriter(fileref, fieldnames=self.parent.writerfields)
+            csvdict = DictWriter(fileref, fieldnames=self.writerfields)
             csvdict.writeheader()
-        self.parent.reactionnumber.set(0)
         self.parent.csvfile.set(self.filename)
-        self.parent.analysismode.set(self.analysismode.get())
         self.newfile.destroy()
         return
 
@@ -189,6 +187,7 @@ class FileTab():
         self.frame = ttk.Frame(parent.notebook)
         self.parent.notebook.add(self.frame, text="CSV")
         self.csvfile = StringVar()
+        self.csvfile.trace("w",self.csvchanged)
         self.writerfields = []
         self.promptentries = {}
         self.promptstrings = {}
@@ -218,6 +217,10 @@ class FileTab():
         return
     def fileselect(self, *args):
         filename = filedialog.askopenfilename()
+        self.csvfile.set(filename)
+        return
+    def csvchanged(self, *args):
+        filename = self.csvfile.get()
         with open(filename, "r") as fileref:
             csvstart = fileref.read(1024)
             if len(csvstart) > 0:
@@ -230,7 +233,6 @@ class FileTab():
                 # Determine what mode should be set for data writing
                 if "Abs" in csvdict.fieldnames:
                     # CSV holds unprocessed data
-                    self.csvfile.set(filename)
                     self.writerfields = csvdict.fieldnames
                     self.analysismode.set("Time")
                     additional = [field for field in self.writerfields if field not in ["Reaction","Time","Abs"]]
@@ -247,7 +249,6 @@ class FileTab():
                         for field in additional:
                             self.promptstrings[field].set(entry[field])
                 elif "Slope" in csvdict.fieldnames:
-                    self.csvfile.set(filename)
                     self.writerfields = csvdict.fieldnames
                     self.analysismode.set("Slope")
                     additional = [field for field in self.writerfields if field != "Reaction"]
