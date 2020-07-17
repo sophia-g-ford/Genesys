@@ -17,7 +17,7 @@ from genesys import Genesys
 from datetime import datetime
 # from time import sleep
 from csv import Sniffer, DictReader, DictWriter
-# from scipy.stats import linregress
+from scipy.stats import linregress
 # from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 # from matplotlib.figure import Figure
 import serial.tools.list_ports as list_ports
@@ -133,12 +133,14 @@ class SpecTab():
         else:
             # Plot the data on the graph.
             # Calculate the best-fit line if slope is selected.
+            if self.parent.filemanage.analysismode.get()=="Slope":
+                analysis = linregress(self.times, self.absorbance)
+                self.parent.filemanage.promptstrings["Slope"].set(analysis[0])
+                self.parent.filemanage.promptstrings["Slope.Err"].set(analysis[4])
             # Plot the best-fit line on the graph.
             self.runprogress.set(0)
             messagebox.showinfo(message="The spectrometer collected {} timepoints and {} absorbances.".format(len(self.times),len(self.absorbance)))            
         return
-        
-
 
 class CreateNewFile():
     def __init__(self, parent, filename):
