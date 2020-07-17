@@ -286,6 +286,7 @@ class FileTab():
         return
 
     def writelines(self, *args):
+        self.reactionnumber.set(self.reactionnumber.get()+1)
         with open(self.csvfile, "a") as csvfile:
             csvdict = DictWriter(csvfile, fieldnames=self.writerfields)
             # Create the dictionary for writing
