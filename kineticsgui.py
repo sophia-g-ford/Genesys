@@ -284,7 +284,20 @@ class FileTab():
         return
 
     def writelines(self, *args):
-        messagebox.showinfo(message="This button will trigger writing to the CSV file.")
+        with open(self.csvfile, "a") as csvfile:
+            csvdict = DictWriter(csvfile, fieldnames=self.writerfields)
+            # Create the dictionary for writing
+            record = {}
+            record["Reaction"] = self.reactionnumber.get()
+            for field in self.promptstrings.keys():
+                record[field] = self.promptstrings[field].get()
+            if self.analysismode.get() == "Time":
+                # Record a line for each timepoint
+                for timepoint, absorbance in zip(self.parent.spectrometer.times,
+                                                 self.parent.spectrometer.absorbance):
+                    record["Time"] = timepoint
+                    record["Abs"] = absorbance
+                    csvdict.writerow(record)
         return
 
 class PlotTab():
