@@ -235,6 +235,12 @@ class FileTab():
                     # CSV holds unprocessed data
                     self.writerfields = csvdict.fieldnames
                     self.analysismode.set("Time")
+                    # Remove previous prompt widgets
+                    for header in self.promptentries.keys():
+                        self.promptentries[header].destroy()
+                        self.promptlabels[header].destroy()
+                    self.promptstrings = {}
+                    # Create new widgets
                     additional = [field for field in self.writerfields if field not in ["Reaction","Time","Abs"]]
                     for prow, field in enumerate(additional):
                         self.promptstrings[field] = StringVar()
@@ -251,6 +257,12 @@ class FileTab():
                 elif "Slope" in csvdict.fieldnames:
                     self.writerfields = csvdict.fieldnames
                     self.analysismode.set("Slope")
+                    # Remove previous prompt widgets
+                    for header in self.promptentries.keys():
+                        self.promptentries[header].destroy()
+                        self.promptlabels[header].destroy()
+                    self.promptstrings = {}
+                    # Create new widgets
                     additional = [field for field in self.writerfields if field != "Reaction"]
                     for prow, field in enumerate(additional):
                         self.promptstrings[field] = StringVar()
