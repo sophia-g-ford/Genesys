@@ -301,6 +301,9 @@ class FileTab():
                     record["Time"] = timepoint
                     record["Abs"] = absorbance
                     csvdict.writerow(record)
+            elif self.analysismode.get() == "Slope":
+                # All data should be ready to be written to the file.
+                csvdict.writerow(record)
         return
 
 class PlotTab():
