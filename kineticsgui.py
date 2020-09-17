@@ -18,8 +18,8 @@ from datetime import datetime
 # from time import sleep
 from csv import Sniffer, DictReader, DictWriter
 from scipy.stats import linregress
-# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-# from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
 import serial.tools.list_ports as list_ports
 
 class TestSpec():
@@ -80,8 +80,10 @@ class SpecTab():
                                         mode='determinate',
                                         variable=self.runprogress)
         self.progress.grid(row=5,column=0,columnspan=2)
-        self.timecourse = Canvas(self.frame)
-        self.timecourse.grid(row=6,column=0,columnspan=2)
+        # Create figure and canvas for figure
+        self.timecourse = Figure(figsize=(5,4), dpi=100)
+        timeplot = FigureCanvasTkAgg(self.timecourse, master=self.frame)
+        timeplot.get_tk_widget().grid(row=6, column=0, columnspan=2)
 
     def specselect(self, *args):
         spec = self.speccombo.get()
@@ -318,8 +320,9 @@ class PlotTab():
         self.plotcombo.bind('<<ComboboxSelected>>', self.plotanalysis)
         self.plotcombo['values'] = ('To', 'Be', 'Computed')
         self.plotcombo.grid(row=0,column=1)
-        self.analysisplot = Canvas(self.frame)
-        self.analysisplot.grid(row=11,column=0,columnspan=2)
+        self.analysisplot = Figure(figsize=(5,4), dpi=100)
+        tabplot = FigureCanvasTkAgg(self.analysisplot, master=self.frame)
+        tabplot.get_tk_widget().grid(row=11,column=0,columnspan=2)
 
     def plotanalysis(self, *args):
         messagebox.showinfo(message="The analysis plot should be updated now.")
