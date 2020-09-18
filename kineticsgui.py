@@ -18,6 +18,7 @@ from datetime import datetime
 # from time import sleep
 from csv import Sniffer, DictReader, DictWriter
 from scipy.stats import linregress
+from numpy import array
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import serial.tools.list_ports as list_ports
@@ -81,9 +82,10 @@ class SpecTab():
                                         variable=self.runprogress)
         self.progress.grid(row=5,column=0,columnspan=2)
         # Create figure and canvas for figure
-        self.timecourse = Figure(figsize=(5,4), dpi=100)
-        timeplot = FigureCanvasTkAgg(self.timecourse, master=self.frame)
-        timeplot.get_tk_widget().grid(row=6, column=0, columnspan=2)
+        self.timefigure = Figure(figsize=(5,4), dpi=100)
+        self.timecanvas = FigureCanvasTkAgg(self.timefigure, master=self.frame)
+        self.timecanvas.draw()
+        self.timecanvas.get_tk_widget().grid(row=6, column=0, columnspan=2)
 
     def specselect(self, *args):
         spec = self.speccombo.get()
@@ -113,6 +115,8 @@ class SpecTab():
         # Clear previous run data
         self.times = []
         self.absorbance = []
+        self.timefigure.gca().clear()
+        self.timecanvas.draw()
         # Set parameters from the interface
         # endtime = self.duration.get()
         self.progress["maximum"] = self.duration.get()
@@ -134,12 +138,17 @@ class SpecTab():
                                 self.add_data, starttime)
         else:
             # Plot the data on the graph.
+            self.timefigure.gca().plot(self.times, self.absorbance, 'bo')
             # Calculate the best-fit line if slope is selected.
             if self.parent.filemanage.analysismode.get()=="Slope":
                 analysis = linregress(self.times, self.absorbance)
                 self.parent.filemanage.promptstrings["Slope"].set(analysis[0])
                 self.parent.filemanage.promptstrings["Slope.Err"].set(analysis[4])
             # Plot the best-fit line on the graph.
+                self.timefigure.gca().plot(self.times,
+                                                analysis[0]*array(self.times)+analysis[1],
+                                           'k-')
+            self.timecanvas.draw()
             self.runprogress.set(0)
             messagebox.showinfo(message="The spectrometer collected {} timepoints and {} absorbances.".format(len(self.times),len(self.absorbance)))            
         return
@@ -322,6 +331,7 @@ class PlotTab():
         self.plotcombo.grid(row=0,column=1)
         self.analysisplot = Figure(figsize=(5,4), dpi=100)
         tabplot = FigureCanvasTkAgg(self.analysisplot, master=self.frame)
+        tabplot.draw()
         tabplot.get_tk_widget().grid(row=11,column=0,columnspan=2)
 
     def plotanalysis(self, *args):
