@@ -1,0 +1,7 @@
+name: genesys
+dependencies:
+        - python
+        - matplotlib
+        - pyserial
+        - scipy
+        - pandas
