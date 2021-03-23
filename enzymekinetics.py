@@ -1,5 +1,7 @@
 #!/usr/bin/env python3.4
 
+# Hello world
+
 # This program uses an interface with the Genesys spectrophotometer to
 # collect timecourse data for enzyme-catalyzed reactions using different
 # volumes of substrate. The absorbance, time elapsed and volume of substrate
@@ -14,6 +16,21 @@ from time import sleep
 import argparse
 from matplotlib import pyplot
 from scipy.stats import linregress
+
+from PyQt5.QtWidgets import QApplication, QMainWindow
+import sys
+ 
+class Window(QMainWindow):
+   def init(self):
+       super().init()
+ 
+       self.setGeometry(300, 300, 600, 400)
+       self.setWindowTitle("PyQt5 window")
+       self.show()
+ 
+app = QApplication(sys.argv)
+window = Window()
+sys.exit(app.exec_())
 
 # Create a reference to the datetime.now function to simplify later code.
 now = datetime.now
