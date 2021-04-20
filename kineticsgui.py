@@ -234,28 +234,28 @@ class FileTab():
         self.csvfile.set(filename)
         return
     import panda as pd
-import glob
-file=input("Enter csv file : ") 
+    import glob
+    file=input("Enter csv file : ") 
 #here inter path of csv file
-    df=pd.read_csv(file)
-    filename=input("Enter a file name you want to save")
+        df=pd.read_csv(file)
+        filename=input("Enter a file name you want to save")
 #here enter destination path to save csv file
-    files = glob.glob(filename) 
+        files = glob.glob(filename) 
 #files is the list of files with same name you entered
-    if not files: 
+        if not files: 
 #if file is empty (no file with filename)
-        df.to_csv(filename)
+            df.to_csv(filename)
         print('file saved')
-    else:
+        else:
      #else file exists
-        print('file already exists !!')
-        def csvchanged(self, *args):
-            filename = self.csvfile.get()
-            with open(filename, "r") as fileref:
-                csvstart = fileref.read(1024)
-                if len(csvstart) > 0:
-                    if not Sniffer().has_header(csvstart):
-                        messagebox.showinfo(icon="error",
+            print('file already exists !!')
+            def csvchanged(self, *args):
+                filename = self.csvfile.get()
+                with open(filename, "r") as fileref:
+                    csvstart = fileref.read(1024)
+                    if len(csvstart) > 0:
+                        if not Sniffer().has_header(csvstart):
+                            messagebox.showinfo(icon="error",
                             message="CSV file contains content but no header!")
                     return
                 fileref.seek(0)
